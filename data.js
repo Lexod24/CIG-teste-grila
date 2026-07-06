@@ -1,3 +1,4 @@
+const QUIZ_DATA = {
   sig: {
     label: "Sisteme informatice",
     questions: [
