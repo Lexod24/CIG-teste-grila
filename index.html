@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8">
+  <title>Grile Licență Management</title>
+  <style>
+    :root { --bg: #0F1110; --card: #1C1F1D; --line: #2C302C; --ink: #EDEAE0; --accent: #D7FF3F; --correct: #7FD858; --wrong: #FF6B5E; }
+    body { background: var(--bg); color: var(--ink); font-family: system-ui, sans-serif; margin: 0; padding: 20px; }
+    .wrap { max-width: 800px; margin: 0 auto; }
+    .nav-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; margin-bottom: 20px; }
+    .btn { background: var(--card); border: 1px solid var(--line); color: var(--ink); padding: 12px; border-radius: 8px; cursor: pointer; font-weight: bold; }
+    .btn.active { border-color: var(--accent); color: var(--accent); }
+    .q-card { background: var(--card); border: 1px solid var(--line); padding: 20px; border-radius: 8px; margin-bottom: 15px; }
+    .q-text { font-size: 16px; line-height: 1.5; margin-bottom: 15px; display: block; white-space: pre-wrap; }
+    .opt { display: block; width: 100%; text-align: left; background: var(--bg); margin: 5px 0; padding: 12px; border: 1px solid var(--line); border-radius: 6px; cursor: pointer; color: var(--ink); font-size: 14px; }
+    .opt:disabled { cursor: not-allowed; opacity: 0.8; }
+    .correct { background: rgba(127,216,88,0.2) !important; border-color: var(--correct) !important; color: var(--correct); }
+    .wrong { background: rgba(255,107,94,0.2) !important; border-color: var(--wrong) !important; color: var(--wrong); }
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <nav id="nav" class="nav-grid"></nav>
+  <main id="main"></main>
+</div>
+<script src="data.js"></script>
+<script>
+  let state = JSON.parse(localStorage.getItem('grile_state')) || { answers: {} };
+  let currentSub = 'mix', mixArray = [];
+  function generateMix() {
+    let all = [];
+    for (let sub in QUIZ_DATA) QUIZ_DATA[sub].questions.forEach((q, i) => all.push({ origSub: sub, origIdx: i, ...q }));
+    for (let i = all.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [all[i], all[j]] = [all[j], all[i]]; }
+    mixArray = all.slice(0, 50);
+  }
+  function resetState() {
+    if (confirm("Resetăm progresul și generăm un nou calup de 50 de întrebări?")) {
+      localStorage.removeItem('grile_state');
+      state = { answers: {} };
+      generateMix();
+      render();
+    }
+  }
+  function render() {
+    let navHtml = `<button class="btn ${currentSub === 'mix' ? 'active' : ''}" onclick="setSub('mix')">Mix 50</button>`;
+    navHtml += Object.keys(QUIZ_DATA).map(k => `<button class="btn ${currentSub === k ? 'active' : ''}" onclick="setSub('${k}')">${QUIZ_DATA[k].label}</button>`).join('');
+    navHtml += `<button class="btn" onclick="resetState()" style="background:#333">Reset</button>`;
+    document.getElementById('nav').innerHTML = navHtml;
+    let questions = currentSub === 'mix' ? mixArray : QUIZ_DATA[currentSub].questions;
+    document.getElementById('main').innerHTML = questions.map((q, i) => {
+      let sub = currentSub === 'mix' ? q.origSub : currentSub, idx = currentSub === 'mix' ? q.origIdx : i, saved = state.answers[sub + '_' + idx];
+      return `<div class="q-card"><span class="q-text"><strong>${i + 1}.</strong> ${q.q}</span>${q.o.map((o, oi) => {
+        let cls = saved !== undefined ? (oi === q.a ? 'correct' : (oi === saved ? 'wrong' : '')) : '';
+        return `<button class="opt ${cls}" onclick="check('${sub}', ${idx}, ${oi})" ${saved !== undefined ? 'disabled' : ''}>${o}</button>`;
+      }).join('')}</div>`;
+    }).join('');
+  }
+  window.setSub = (k) => { currentSub = k; if(k==='mix' && mixArray.length===0) generateMix(); render(); };
+  window.check = (s, qi, oi) => { state.answers[s + '_' + qi] = oi; localStorage.setItem('grile_state', JSON.stringify(state)); render(); };
+  generateMix(); render();
+</script>
+</body>
+</html>
