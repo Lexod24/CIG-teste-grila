@@ -53,7 +53,7 @@ const QUIZ_DATA = {
       {q: "49. Rezultat interogare PRODUSE:", o: ["A. Afișează tabelul cu produse filtrate/sortate conform cerinței.", "B. Nu afișează nimic.", "C. Șterge produsele.", "D. Adaugă produse."], a: 0},
       {q: "50. Rezultat interogare CLIENTI/FACTURI:", o: ["A. Șterge facturile.", "B. Adaugă clienți.", "C. Afișează lista clienților și a facturilor asociate.", "D. Nu returnează nimic."], a: 2}
     ]
-  }
+  },
   micro: {
     label: "Microeconomie",
     questions: [
