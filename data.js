@@ -1,5 +1,5 @@
 const QUIZ_DATA = {
-    sig: {
+      sig: {
     label: "Sisteme informatice",
     questions: [
       {q: "1. Se consideră tabelele: STUDENTI, PROFESORI. Care interogare returnează studenții și profesorii din provincie?", o: ["A. SELECT CodStud, NumeStud, LoculNasterii, Cod Prof, NumeProf, LoculNasterii FROM STUDENTI, PROFESORI WHERE LoculNasterii<>'Bucureşti';", "B. SELECT CodStud, NumeStud, LoculNasterii, Cod Prof, NumeProf, LoculNasterii FROM STUDENTI, PROFESORI WHERE LoculNasterii = 'Provincie';", "C. SELECT CodStud, NumeStud, LoculNasterii FROM STUDENTI WHERE LoculNasterii = 'Provincie' UNION SELECT CodProf, NumeStud, LoculNasterii FROM PROFESORI WHERE LoculNasterii = 'Provincie';", "D. SELECT CodStud, NumeStud, LoculNasterii FROM STUDENTI WHERE LoculNasterii <>'Bucureşti' UNION SELECT CodProf, NumeProf, LoculNasterii FROM PROFESORI WHERE LoculNasterii <>'Bucureşti';"], a: 3},
@@ -53,7 +53,7 @@ const QUIZ_DATA = {
       {q: "49. Rezultat interogare PRODUSE:", o: ["A. Afișează tabelul cu produse filtrate/sortate conform cerinței.", "B. Nu afișează nimic.", "C. Șterge produsele.", "D. Adaugă produse."], a: 0},
       {q: "50. Rezultat interogare CLIENTI/FACTURI:", o: ["A. Șterge facturile.", "B. Adaugă clienți.", "C. Afișează lista clienților și a facturilor asociate.", "D. Nu returnează nimic."], a: 2}
     ]
-  },
+    },
   micro: {
     label: "Microeconomie",
     questions: [
